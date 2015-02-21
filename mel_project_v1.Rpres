@@ -1,0 +1,72 @@
+Customer Incident Update
+========================================================
+author: Melabraham
+date: `r date()`
+
+Incidents reported by the customer for the software products
+========================================================
+
+### View of the incidents 
+
+- Summary of all the incidents till date
+- Plot of the number of incidents per month by advisor
+- Plot of the number of Incidents by root cause for advisor
+- Appendix
+-- List of all the incidents till date
+
+Summary of the incidents  
+========================================================
+
+```{r, echo=FALSE}
+imdataset  <- read.csv("incidentdataset.csv",header=TRUE)
+
+ t1 <- imdataset[,c("advisor","product","severity","CAUSE_CODE","RESOLUTION_CODE")]
+ colnames(t1) <- c("ADVISOR","PRODUCT","SEVERITY","CAUSE_CODE","RESOLUTION_CODE")  
+
+ summary(t1)
+
+```
+
+Plot of number of incidents per month by advisor
+========================================================
+
+```{r, echo=FALSE}
+   library(ggplot2)
+   t1 <- imdataset[,c("Incident.Date","severity", "advisor")]
+   
+   ag.t1 <- aggregate(t1$severity, by=list(t1$Incident.Date,t1$advisor), FUN=length)
+   
+   colnames(ag.t1) <- c("Incident_Month","Advisor","Incident_Count")
+   ggplot(data = ag.t1, aes(Incident_Month, Incident_Count, fill = Advisor)) + geom_bar(stat = "identity")
+
+
+```
+Plot of number of Incidents by root cause for advisor
+========================================================
+
+```{r, echo=FALSE}
+   library(ggplot2)
+   t1 <- imdataset[,c("CAUSE_CODE","severity", "advisor")]
+    
+   ag.t1 <- aggregate(t1$severity, by=list(t1$CAUSE_CODE,t1$advisor), FUN=length)
+
+   colnames(ag.t1) <- c("CAUSE_CODE","Advisor","Incident_Count")
+
+   ggplot(data = ag.t1, aes(CAUSE_CODE, Incident_Count, fill = Advisor)) + geom_bar(stat = "identity")
+
+
+```
+Appendix  
+========================================================
+
+List of all the incidents  
+========================================================
+
+```{r, echo=FALSE}
+
+ t1 <- imdataset[,c("Incident.Date","advisor","product","severity","CAUSE_CODE","RESOLUTION_CODE")]
+ colnames(t1) <- c("INCIDENT_MONTH","ADVISOR","PRODUCT","SEVERITY","CAUSE_CODE","RESOLUTION_CODE")  
+
+ t1
+
+```
